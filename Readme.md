@@ -1,5 +1,5 @@
 # TORGATE
-The utility to creates a set of tor proxy servers.
+The utility to create a set of tor proxy servers.
 
 ## Requirements
 1. Linux, MacOS, not tested with Windows but possibly can work
