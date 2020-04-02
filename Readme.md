@@ -28,3 +28,5 @@ To see all options use
 ```
  python3 torgate.py --help
 ```
+
+After establishing tor circuits you will find all available proxies in PROXIES_FILENAME config path
