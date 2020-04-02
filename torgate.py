@@ -234,16 +234,16 @@ async def main():
     logging.info("Temp directory %s created" % (tor_removable_dir_path,))
 
     # запускаем процессы тора
-    all_ports_ports = random.sample(range(args.min_port, args.max_port), args.count * 2)
-    control_ports = all_ports_ports[args.count:]
-    ports = all_ports_ports[:args.count]
-    all_ports = list(map(lambda x, y: (x, y), ports, control_ports))
+    all_ports = random.sample(range(args.min_port, args.max_port), args.count * 2)
+    control_ports = all_ports[args.count:]
+    ports = all_ports[:args.count]
+    all_ports_map = list(map(lambda x, y: (x, y), ports, control_ports))
     futures = [start_tor_pipe(
                     args.interface,
                     port,
                     control_port,
                     args.tor_binary,
-                    tor_removable_dir_path) for port, control_port in all_ports]
+                    tor_removable_dir_path) for port, control_port in all_ports_map]
     running_futures = [asyncio.ensure_future(future) for future in futures]
 
     # запускаем бесконечную следилку. Внутри при ctrl+c будет перехват, и мы попадем на след. строку
@@ -253,11 +253,11 @@ async def main():
     await asyncio.wait(running_futures)
 
     # удаляем временную папку
-    process = await asyncio.create_subprocess_shell("rm -rf " + tor_removable_dir_path)
+    process = await asyncio.create_subprocess_shell("rm -rf %s || true" % tor_removable_dir_path)
     await process.wait()
     logging.info("Temp directory %s was removed" % (tor_removable_dir_path,))
 
-    process = await asyncio.create_subprocess_shell("rm -rf || true" + config.PROXIES_FILENAME)
+    process = await asyncio.create_subprocess_shell("rm -rf %s || true" % config.PROXIES_FILENAME)
     await process.wait()
     logging.info("Proxies file %s was removed" % (config.PROXIES_FILENAME,))
 
@@ -265,7 +265,7 @@ async def main():
 if __name__ == "__main__":
     try:
         asyncio.run(main())
-    except KeyboardInterrupt as ke:
+    except KeyboardInterrupt:
         logging.info("Bye!")
 
 
