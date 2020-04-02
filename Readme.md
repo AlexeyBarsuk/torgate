@@ -15,11 +15,12 @@ pip3 install -r requirements.txt
 ```
 
 ## Usage
-1. When you start the utility it takes it's defaults from config.py. So you can edit config.py as you need
-````
+When you start the utility it takes it's defaults from config.py. So you can edit config.py as you need
+```
 python3 torgate.py
 ```
-2. Also you can use command line arguments to do the same.
+
+Also you can use command line arguments to do the same.
 ```
  python3 torgate.py --count 100 --tor_binary /opt/local/bin/tor --interface 127.0.0.1
 ```
